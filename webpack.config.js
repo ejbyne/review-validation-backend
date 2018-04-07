@@ -6,7 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
   mode: 'development',
   entry: {
-    app: './src/index.js'
+    app: './src/index.jsx'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
