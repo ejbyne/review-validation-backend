@@ -1,3 +1,4 @@
+import expect from 'unexpected';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
@@ -32,7 +33,7 @@ describe('review action creators', () => {
     it('should dispatch REVIEW CREATE SUCCESS action', () => {
       const action = reviewCreateSuccess({ id: 1, comment: 'great' });
 
-      expect(action).toEqual({
+      expect(action, 'to equal', {
         type: REVIEW_CREATE_SUCCESS,
         payload: { id: 1, comment: 'great' }
       });
@@ -41,11 +42,11 @@ describe('review action creators', () => {
 
   describe('reviewCreateError', () => {
     it('should dispatch REVIEW CREATE ERROR action', () => {
-      const action = reviewCreateError(new Error('create error'));
+      const action = reviewCreateError({ message: 'bad request' });
 
-      expect(action).toEqual({
+      expect(action, 'to equal', {
         type: REVIEW_CREATE_ERROR,
-        payload: new Error('create error')
+        payload: { message: 'bad request' }
       });
     });
   });
@@ -54,7 +55,7 @@ describe('review action creators', () => {
     it('should send a post request to the backend', () => {
       store.dispatch(createReview({ comment: 'great' }));
 
-      expect(fetchMock.lastCall()).toEqual([
+      expect(fetchMock.lastCall(), 'to equal', [
         '/api/reviews',
         {
           method: 'POST',
@@ -66,7 +67,7 @@ describe('review action creators', () => {
     it('should dispatch REVIEW CREATE SUCCESS ACTION when post is successful', async () => {
       await store.dispatch(createReview({ comment: 'great' }));
 
-      expect(store.getActions()).toEqual([
+      expect(store.getActions(), 'to equal', [
         {
           type: REVIEW_CREATE_SUCCESS,
           payload: { id: 1, comment: 'great' }
@@ -83,7 +84,7 @@ describe('review action creators', () => {
 
       await store.dispatch(createReview({ comment: 'invalid' }));
 
-      expect(store.getActions()).toEqual([
+      expect(store.getActions(), 'to equal', [
         {
           type: REVIEW_CREATE_ERROR,
           payload: { message: 'bad request' }

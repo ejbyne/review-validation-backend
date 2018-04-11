@@ -1,3 +1,5 @@
+import expect from 'unexpected';
+
 import reducer from '../reducer';
 import { REVIEW_CREATE_SUCCESS, REVIEW_CREATE_ERROR } from '../actions';
 
@@ -19,7 +21,7 @@ describe('review reducer', () => {
 
     const updatedState = reducer(state, action);
 
-    expect(updatedState).toEqual({
+    expect(updatedState, 'to equal', {
       lastReview: { id: 1, comment: 'great' },
       errors: null
     });
@@ -33,7 +35,7 @@ describe('review reducer', () => {
 
     const updatedState = reducer(state, action);
 
-    expect(updatedState).toEqual({
+    expect(updatedState, 'to equal', {
       lastReview: null,
       errors: 'bad request'
     });
