@@ -1,0 +1,24 @@
+export const REVIEW_CREATE_SUCCESS = 'REVIEW_CREATE_SUCCESS';
+export const REVIEW_CREATE_ERROR = 'REVIEW_CREATE_ERROR';
+
+export const reviewCreateSuccess = payload => ({
+  type: REVIEW_CREATE_SUCCESS,
+  payload
+});
+
+export const reviewCreateError = payload => ({
+  type: REVIEW_CREATE_ERROR,
+  payload
+});
+
+export const createReview = command => async dispatch => {
+  const response = await fetch('/api/reviews', {
+    method: 'POST',
+    body: JSON.stringify(command)
+  });
+  const json = await response.json();
+  if (!response.ok) {
+    return dispatch(reviewCreateError(json));
+  }
+  return dispatch(reviewCreateSuccess(json));
+};

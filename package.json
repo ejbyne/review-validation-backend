@@ -1,5 +1,5 @@
 {
-  "name": "order-validation-frontend",
+  "name": "review-validation-frontend",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -11,24 +11,30 @@
   "license": "ISC",
   "dependencies": {
     "react": "^16.3.1",
-    "react-dom": "^16.3.1"
+    "react-dom": "^16.3.1",
+    "react-redux": "^5.0.7",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^0.28.11",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-import": "^2.10.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.7.0",
+    "fetch-mock": "^6.3.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^22.4.3",
     "prettier": "^1.11.1",
     "prop-types": "^15.6.1",
+    "redux-mock-store": "^1.5.1",
     "style-loader": "^0.20.3",
     "unexpected": "^10.37.2",
     "unexpected-react": "^5.0.1",
