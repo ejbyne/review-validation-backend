@@ -4,8 +4,10 @@ import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 
 import {
+  REVIEW_CREATE_PENDING,
   REVIEW_CREATE_SUCCESS,
   REVIEW_CREATE_ERROR,
+  reviewCreatePending,
   reviewCreateSuccess,
   reviewCreateError,
   createReview
@@ -26,6 +28,14 @@ describe('review action creators', () => {
     fetchMock.postOnce('/api/reviews', {
       status: 201,
       body: JSON.stringify({ id: 1, comment: 'great' })
+    });
+  });
+
+  describe('reviewCreatePending', () => {
+    const action = reviewCreatePending();
+
+    expect(action, 'to equal', {
+      type: REVIEW_CREATE_PENDING
     });
   });
 
@@ -64,10 +74,11 @@ describe('review action creators', () => {
       ]);
     });
 
-    it('should dispatch REVIEW CREATE SUCCESS ACTION when post is successful', async () => {
+    it('should dispatch REVIEW CREATE PENDING and then REVIEW CREATE SUCCESS ACTION when post is successful', async () => {
       await store.dispatch(createReview({ comment: 'great' }));
 
       expect(store.getActions(), 'to equal', [
+        { type: REVIEW_CREATE_PENDING },
         {
           type: REVIEW_CREATE_SUCCESS,
           payload: { id: 1, comment: 'great' }
@@ -75,7 +86,7 @@ describe('review action creators', () => {
       ]);
     });
 
-    it('should dispatch REVIEW CREATE ERROR ACTION when post is unsuccessful', async () => {
+    it('should dispatch REVIEW CREATE PENDING and then REVIEW CREATE ERROR ACTION when post is unsuccessful', async () => {
       fetchMock.restore();
       fetchMock.postOnce('/api/reviews', {
         status: 404,
@@ -85,6 +96,7 @@ describe('review action creators', () => {
       await store.dispatch(createReview({ comment: 'invalid' }));
 
       expect(store.getActions(), 'to equal', [
+        { type: REVIEW_CREATE_PENDING },
         {
           type: REVIEW_CREATE_ERROR,
           payload: { message: 'bad request' }

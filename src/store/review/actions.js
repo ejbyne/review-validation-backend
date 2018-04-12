@@ -1,5 +1,10 @@
+export const REVIEW_CREATE_PENDING = 'REVIEW_CREATE_PENDING';
 export const REVIEW_CREATE_SUCCESS = 'REVIEW_CREATE_SUCCESS';
 export const REVIEW_CREATE_ERROR = 'REVIEW_CREATE_ERROR';
+
+export const reviewCreatePending = () => ({
+  type: REVIEW_CREATE_PENDING
+});
 
 export const reviewCreateSuccess = payload => ({
   type: REVIEW_CREATE_SUCCESS,
@@ -12,6 +17,7 @@ export const reviewCreateError = payload => ({
 });
 
 export const createReview = command => async dispatch => {
+  dispatch(reviewCreatePending());
   const response = await fetch('/api/reviews', {
     method: 'POST',
     body: JSON.stringify(command)

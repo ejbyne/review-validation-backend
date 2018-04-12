@@ -1,7 +1,11 @@
 import expect from 'unexpected';
 
 import reducer from '../reducer';
-import { REVIEW_CREATE_SUCCESS, REVIEW_CREATE_ERROR } from '../actions';
+import {
+  REVIEW_CREATE_SUCCESS,
+  REVIEW_CREATE_ERROR,
+  REVIEW_CREATE_PENDING
+} from '../actions';
 
 describe('review reducer', () => {
   let state;
@@ -9,8 +13,20 @@ describe('review reducer', () => {
   beforeEach(() => {
     state = {
       lastReview: null,
-      errors: null
+      errorMessage: null
     };
+  });
+
+  it('should reset errors when review create pending', () => {
+    state = { ...state, errorMessage: 'ERRORS' };
+    const action = { type: REVIEW_CREATE_PENDING };
+
+    const updatedState = reducer(state, action);
+
+    expect(updatedState, 'to equal', {
+      lastReview: null,
+      errorMessage: null
+    });
   });
 
   it('should add created review to state', () => {
@@ -23,7 +39,7 @@ describe('review reducer', () => {
 
     expect(updatedState, 'to equal', {
       lastReview: { id: 1, comment: 'great' },
-      errors: null
+      errorMessage: null
     });
   });
 
@@ -37,7 +53,7 @@ describe('review reducer', () => {
 
     expect(updatedState, 'to equal', {
       lastReview: null,
-      errors: 'bad request'
+      errorMessage: 'bad request'
     });
   });
 });

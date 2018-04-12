@@ -12,19 +12,23 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js'
   },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
   devtool: 'inline-source-map',
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     hot: true,
     proxy: {
-      "/api": "http://localhost:5000"
+      '/api': 'http://localhost:5000'
     }
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        use: 'babel-loader'
+        use: 'babel-loader',
+        exclude: /node_modules/
       },
       {
         test: /\.css$/,
@@ -36,14 +40,15 @@ module.exports = {
               modules: true
             }
           }
-        ]
+        ],
+        exclude: /node_modules/
       }
     ]
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      template: 'public/index.html',
+      template: 'public/index.html'
     }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin()

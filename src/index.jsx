@@ -1,6 +1,21 @@
+import 'regenerator-runtime/runtime';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider as ReduxProvider } from 'react-redux';
+import { JssProvider, jss } from 'react-jss';
 
-import BasicForm from './components/basicForm/BasicForm';
+import store from './store';
+import AppContainer from './components/AppContainer';
 
-ReactDOM.render(<BasicForm />, document.getElementById('app'));
+jss.setup({
+  insertionPoint: document.getElementById('mui-styles')
+});
+
+ReactDOM.render(
+  <ReduxProvider store={store}>
+    <JssProvider jss={jss}>
+      <AppContainer />
+    </JssProvider>
+  </ReduxProvider>,
+  document.getElementById('app')
+);
