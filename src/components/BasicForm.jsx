@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 
+import messages from '../messages/messages.en.json';
+
 import styles from './BasicForm.css';
 
 const emptyForm = {
@@ -17,7 +19,8 @@ const emptyForm = {
 
 class BasicForm extends Component {
   static propTypes = {
-    onCreateReview: PropTypes.func.isRequired
+    onCreateReview: PropTypes.func.isRequired,
+    errors: PropTypes.object.isRequired
   };
 
   state = emptyForm;
@@ -29,40 +32,51 @@ class BasicForm extends Component {
   handleSubmit = () => this.props.onCreateReview(this.state);
 
   render() {
+    const { errors } = this.props;
     const { firstName, lastName, email, score, comment, date } = this.state;
     return (
       <form className={styles.container} noValidate autoComplete="off">
         <TextField
-          label="First Name"
+          error={errors.firstName !== undefined}
+          label={messages.firstName}
           value={firstName}
+          helperText={errors.firstName}
           onChange={this.handleChange('firstName')}
           margin="normal"
           className={styles.textField}
         />
         <TextField
-          label="Last Name"
+          error={errors.lastName !== undefined}
+          label={messages.lastName}
           value={lastName}
+          helperText={errors.lastName}          
           onChange={this.handleChange('lastName')}
           margin="normal"
           className={styles.textField}
         />
         <TextField
-          label="Email"
+          error={errors.email !== undefined}
+          label={messages.email}
           value={email}
+          helperText={errors.email}          
           onChange={this.handleChange('email')}
           margin="normal"
           className={styles.textField}
         />
         <TextField
-          label="Score"
+          error={errors.score !== undefined}
+          label={messages.score}
           value={score}
+          helperText={errors.score}          
           onChange={this.handleChange('score')}
           margin="normal"
           className={styles.textField}
         />
         <TextField
-          label="Comment"
+          error={errors.comment !== undefined}
+          label={messages.comment}
           value={comment}
+          helperText={errors.comment}          
           multiline
           rows="4"
           onChange={this.handleChange('comment')}
@@ -70,8 +84,10 @@ class BasicForm extends Component {
           className={styles.textField}
         />
         <TextField
-          label="Date"
+          error={errors.date !== undefined}
+          label={messages.date}
           value={date}
+          helperText={errors.date}          
           onChange={this.handleChange('date')}
           margin="normal"
           className={styles.textField}

@@ -13,11 +13,12 @@ describe('review reducer', () => {
   beforeEach(() => {
     state = {
       lastReview: null,
-      errorMessage: null
+      errorMessage: null,
+      errors: {}
     };
   });
 
-  it('should reset errors when review create pending', () => {
+  it('should reset error message when review create pending', () => {
     state = { ...state, errorMessage: 'ERRORS' };
     const action = { type: REVIEW_CREATE_PENDING };
 
@@ -25,7 +26,8 @@ describe('review reducer', () => {
 
     expect(updatedState, 'to equal', {
       lastReview: null,
-      errorMessage: null
+      errorMessage: null,
+      errors: {}
     });
   });
 
@@ -39,21 +41,36 @@ describe('review reducer', () => {
 
     expect(updatedState, 'to equal', {
       lastReview: { id: 1, comment: 'great' },
-      errorMessage: null
+      errorMessage: null,
+      errors: {}
     });
   });
 
-  it('should add create errors to state', () => {
+  it('should add error message and parsed errors object to state', () => {
     const action = {
       type: REVIEW_CREATE_ERROR,
-      payload: { message: 'bad request' }
+      payload: {
+        error: 'Bad Request',
+        message:
+          'child "firstName" fails because ["firstName" is not allowed to be empty]. child "date" fails because ["date" must be a number of milliseconds or valid date string]',
+        statusCode: 400,
+        validation: {
+          source: 'payload',
+          keys: ['firstName', 'date']
+        }
+      }
     };
 
     const updatedState = reducer(state, action);
 
     expect(updatedState, 'to equal', {
       lastReview: null,
-      errorMessage: 'bad request'
+      errorMessage:
+        'child "firstName" fails because ["firstName" is not allowed to be empty]. child "date" fails because ["date" must be a number of milliseconds or valid date string]',
+      errors: {
+        firstName: 'First Name is not allowed to be empty',
+        date: 'Date must be a number of milliseconds or valid date string'
+      }
     });
   });
 });
