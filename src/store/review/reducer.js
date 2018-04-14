@@ -1,4 +1,5 @@
 import {
+  REVIEW_LOAD_SUCCESS,
   REVIEW_CREATE_SUCCESS,
   REVIEW_CREATE_ERROR,
   REVIEW_CREATE_PENDING,
@@ -12,7 +13,7 @@ const fieldReplaceRegex = /".+?"/g;
 
 const initialState = {
   schema: null,
-  lastReview: null,
+  reviews: [],
   errorMessage: null,
   errors: {}
 };
@@ -32,10 +33,12 @@ const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case LOAD_SCHEMA_SUCCESS:
       return { ...state, schema: payload };
+    case REVIEW_LOAD_SUCCESS:
+      return { ...state, reviews: payload };
     case REVIEW_CREATE_PENDING:
       return { ...state, errorMessage: null };
     case REVIEW_CREATE_SUCCESS:
-      return { ...state, lastReview: payload };
+      return { ...state, reviews: [...state.reviews, payload] };
     case REVIEW_CREATE_ERROR:
       return {
         ...state,

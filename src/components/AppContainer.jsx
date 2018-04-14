@@ -1,8 +1,20 @@
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { getErrorMessage, getErrors } from '../store/review/selectors';
-import { createReview } from '../store/review/actions';
+import { loadSchema, loadReviews, createReview } from '../store/review/actions';
 import App from './App';
+
+class AppContainer extends Component {
+  componentDidMount() {
+    this.props.loadSchema();
+    this.props.loadReviews();
+  }
+
+  render() {
+    return <App {...this.props} />;
+  }
+}
 
 const mapStateToProps = state => ({
   errorMessage: getErrorMessage(state),
@@ -10,8 +22,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onCreateReview: review => dispatch(createReview(review))
+  loadSchema: () => dispatch(loadSchema()),
+  loadReviews: () => dispatch(loadReviews()),
+  createReview: review => dispatch(createReview(review))
 });
 
-const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);
-export default AppContainer;
+export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);

@@ -5,7 +5,8 @@ import {
   REVIEW_CREATE_SUCCESS,
   REVIEW_CREATE_ERROR,
   REVIEW_CREATE_PENDING,
-  LOAD_SCHEMA_SUCCESS
+  LOAD_SCHEMA_SUCCESS,
+  REVIEW_LOAD_SUCCESS
 } from '../actions';
 
 describe('review reducer', () => {
@@ -14,7 +15,7 @@ describe('review reducer', () => {
   beforeEach(() => {
     state = {
       schema: null,
-      lastReview: null,
+      reviews: [],
       errorMessage: null,
       errors: {}
     };
@@ -28,6 +29,20 @@ describe('review reducer', () => {
     expect(updatedState, 'to equal', {
       ...state,
       schema: { schema: 'SCHEMA' }
+    });
+  });
+
+  it('should add loaded reviews to state', () => {
+    const action = {
+      type: REVIEW_LOAD_SUCCESS,
+      payload: [{ id: 1 }, { id: 2 }]
+    };
+
+    const updatedState = reducer(state, action);
+
+    expect(updatedState, 'to equal', {
+      ...state,
+      reviews: [{ id: 1 }, { id: 2 }]
     });
   });
 
@@ -53,20 +68,16 @@ describe('review reducer', () => {
 
     expect(updatedState, 'to equal', {
       ...state,
-      lastReview: { id: 1, comment: 'great' }
+      reviews: [{ id: 1, comment: 'great' }]
     });
   });
 
   it('should add error message and parsed errors object to state', () => {
     const errorMessage = {
       error: 'Bad Request',
-      message:
-        'child "firstName" fails because ["firstName" is not allowed to be empty]. child "date" fails because ["date" must be a number of milliseconds or valid date string]',
       statusCode: 400,
-      validation: {
-        source: 'payload',
-        keys: ['firstName', 'date']
-      }
+      message:
+        'child "firstName" fails because ["firstName" is not allowed to be empty]. child "date" fails because ["date" must be a number of milliseconds or valid date string]'
     };
 
     const action = {

@@ -13,8 +13,8 @@ const App = ({ onCreateReview, errorMessage, errors }) => (
 
 App.propTypes = {
   onCreateReview: PropTypes.func.isRequired,
-  errorMessage: PropTypes.string.isRequired,
-  errors: PropTypes.object.isRequired
+  errorMessage: PropTypes.string,
+  errors: PropTypes.object
 };
 
 export default App;
