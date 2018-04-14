@@ -1,6 +1,12 @@
+export const LOAD_SCHEMA_SUCCESS = 'LOAD_SCHEMA_SUCCESS';
 export const REVIEW_CREATE_PENDING = 'REVIEW_CREATE_PENDING';
 export const REVIEW_CREATE_SUCCESS = 'REVIEW_CREATE_SUCCESS';
 export const REVIEW_CREATE_ERROR = 'REVIEW_CREATE_ERROR';
+
+export const loadSchemaSuccess = payload => ({
+  type: LOAD_SCHEMA_SUCCESS,
+  payload
+});
 
 export const reviewCreatePending = () => ({
   type: REVIEW_CREATE_PENDING

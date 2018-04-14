@@ -1,7 +1,8 @@
 import {
   REVIEW_CREATE_SUCCESS,
   REVIEW_CREATE_ERROR,
-  REVIEW_CREATE_PENDING
+  REVIEW_CREATE_PENDING,
+  LOAD_SCHEMA_SUCCESS
 } from './actions';
 import messages from '../../messages/messages.en.json';
 
@@ -10,6 +11,7 @@ const fieldFindRegEx = /(?<=").+?(?=")/;
 const fieldReplaceRegex = /".+?"/g;
 
 const initialState = {
+  schema: null,
   lastReview: null,
   errorMessage: null,
   errors: {}
@@ -28,6 +30,8 @@ const parseErrors = errorResponse => {
 
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
+    case LOAD_SCHEMA_SUCCESS:
+      return { ...state, schema: payload };
     case REVIEW_CREATE_PENDING:
       return { ...state, errorMessage: null };
     case REVIEW_CREATE_SUCCESS:
@@ -35,7 +39,7 @@ const reducer = (state = initialState, { type, payload }) => {
     case REVIEW_CREATE_ERROR:
       return {
         ...state,
-        errorMessage: payload.message,
+        errorMessage: JSON.stringify(payload),
         errors: parseErrors(payload)
       };
     default:

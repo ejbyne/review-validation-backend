@@ -4,9 +4,11 @@ import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
 
 import {
+  LOAD_SCHEMA_SUCCESS,
   REVIEW_CREATE_PENDING,
   REVIEW_CREATE_SUCCESS,
   REVIEW_CREATE_ERROR,
+  loadSchemaSuccess,
   reviewCreatePending,
   reviewCreateSuccess,
   reviewCreateError,
@@ -31,11 +33,24 @@ describe('review action creators', () => {
     });
   });
 
-  describe('reviewCreatePending', () => {
-    const action = reviewCreatePending();
+  describe('loadSchemaSuccess', () => {
+    it('should dispatch LOAD SCHEMA SUCCESS action', () => {
+      const action = loadSchemaSuccess({ schema: 'SCHEMA' });
 
-    expect(action, 'to equal', {
-      type: REVIEW_CREATE_PENDING
+      expect(action, 'to equal', {
+        type: LOAD_SCHEMA_SUCCESS,
+        payload: { schema: 'SCHEMA' }
+      });
+    });
+  });
+
+  describe('reviewCreatePending', () => {
+    it('should dispatch REVIEW CREATE PENDING action', () => {
+      const action = reviewCreatePending();
+
+      expect(action, 'to equal', {
+        type: REVIEW_CREATE_PENDING
+      });
     });
   });
 
