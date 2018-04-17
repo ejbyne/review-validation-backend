@@ -19,6 +19,7 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     hot: true,
+    port: 3000,
     proxy: {
       '/api': 'http://localhost:5000'
     }
@@ -52,5 +53,10 @@ module.exports = {
     }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin()
-  ]
+  ],
+  node: {
+    net: 'empty',
+    tls: 'empty',
+    dns: 'empty'
+  }
 };

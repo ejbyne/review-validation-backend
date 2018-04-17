@@ -1,9 +1,10 @@
+import SwaggerParser from 'swagger-parser';
+
 export const SCHEMA_LOAD_SUCCESS = 'SCHEMA_LOAD_SUCCESS';
 export const REVIEW_LOAD_SUCCESS = 'REVIEW_LOAD_SUCCESS';
-export const REVIEW_CREATE_PENDING = 'REVIEW_CREATE_PENDING';
 export const REVIEW_CREATE_SUCCESS = 'REVIEW_CREATE_SUCCESS';
 export const REVIEW_CREATE_ERROR = 'REVIEW_CREATE_ERROR';
-export const REVIEW_VALIDATE = 'REVIEW_VALIDATE';
+export const REVIEW_VALIDATED = 'REVIEW_VALIDATED';
 
 export const schemaLoadSuccess = payload => ({
   type: SCHEMA_LOAD_SUCCESS,
@@ -13,10 +14,6 @@ export const schemaLoadSuccess = payload => ({
 export const reviewLoadSuccess = payload => ({
   type: REVIEW_LOAD_SUCCESS,
   payload
-});
-
-export const reviewCreatePending = () => ({
-  type: REVIEW_CREATE_PENDING
 });
 
 export const reviewCreateSuccess = payload => ({
@@ -29,15 +26,16 @@ export const reviewCreateError = payload => ({
   payload
 });
 
-export const reviewValidate = payload => ({
-  type: REVIEW_VALIDATE,
+export const reviewValidated = payload => ({
+  type: REVIEW_VALIDATED,
   payload
 });
 
 export const loadSchema = () => async dispatch => {
   const response = await fetch('/api/schema');
   const json = await response.json();
-  return dispatch(schemaLoadSuccess(json));
+  const schema = await SwaggerParser.dereference(json);
+  dispatch(schemaLoadSuccess(schema));
 };
 
 export const loadReviews = () => async dispatch => {
@@ -46,8 +44,16 @@ export const loadReviews = () => async dispatch => {
   return dispatch(reviewLoadSuccess(json));
 };
 
+export const validateReview = command => async (dispatch, getState) => {
+  try {
+    await getState().validatePost(command);
+    return dispatch(reviewValidated(null));
+  } catch (err) {
+    return dispatch(reviewValidated({ message: err.message }));
+  }
+};
+
 export const createReview = command => async dispatch => {
-  dispatch(reviewCreatePending());
   const response = await fetch('/api/reviews', {
     method: 'POST',
     body: JSON.stringify(command)

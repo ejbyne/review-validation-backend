@@ -19,7 +19,8 @@ const emptyForm = {
 
 class BasicForm extends Component {
   static propTypes = {
-    onCreateReview: PropTypes.func.isRequired,
+    createReview: PropTypes.func.isRequired,
+    validateReview: PropTypes.func.isRequired,
     errors: PropTypes.object.isRequired
   };
 
@@ -29,7 +30,9 @@ class BasicForm extends Component {
     this.setState({ [name]: value });
   };
 
-  handleSubmit = () => this.props.onCreateReview(this.state);
+  handleSubmit = () => this.props.createReview(this.state);
+
+  handleBlur = () => this.props.validateReview(this.state);
 
   render() {
     const { errors } = this.props;
@@ -42,6 +45,7 @@ class BasicForm extends Component {
           value={firstName}
           helperText={errors.firstName}
           onChange={this.handleChange('firstName')}
+          onBlur={this.handleBlur}
           margin="normal"
           className={styles.textField}
         />
@@ -49,8 +53,9 @@ class BasicForm extends Component {
           error={errors.lastName !== undefined}
           label={messages.lastName}
           value={lastName}
-          helperText={errors.lastName}          
+          helperText={errors.lastName}
           onChange={this.handleChange('lastName')}
+          onBlur={this.handleBlur}
           margin="normal"
           className={styles.textField}
         />
@@ -58,8 +63,9 @@ class BasicForm extends Component {
           error={errors.email !== undefined}
           label={messages.email}
           value={email}
-          helperText={errors.email}          
+          helperText={errors.email}
           onChange={this.handleChange('email')}
+          onBlur={this.handleBlur}
           margin="normal"
           className={styles.textField}
         />
@@ -67,8 +73,9 @@ class BasicForm extends Component {
           error={errors.score !== undefined}
           label={messages.score}
           value={score}
-          helperText={errors.score}          
+          helperText={errors.score}
           onChange={this.handleChange('score')}
+          onBlur={this.handleBlur}
           margin="normal"
           className={styles.textField}
         />
@@ -76,10 +83,11 @@ class BasicForm extends Component {
           error={errors.comment !== undefined}
           label={messages.comment}
           value={comment}
-          helperText={errors.comment}          
+          helperText={errors.comment}
           multiline
           rows="4"
           onChange={this.handleChange('comment')}
+          onBlur={this.handleBlur}
           margin="normal"
           className={styles.textField}
         />
@@ -87,8 +95,9 @@ class BasicForm extends Component {
           error={errors.date !== undefined}
           label={messages.date}
           value={date}
-          helperText={errors.date}          
+          helperText={errors.date}
           onChange={this.handleChange('date')}
+          onBlur={this.handleBlur}
           margin="normal"
           className={styles.textField}
         />

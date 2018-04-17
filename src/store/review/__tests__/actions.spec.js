@@ -2,40 +2,43 @@ import expect from 'unexpected';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import fetchMock from 'fetch-mock';
+import SwaggerParser from 'swagger-parser';
 
 import {
   SCHEMA_LOAD_SUCCESS,
   REVIEW_LOAD_SUCCESS,
-  REVIEW_CREATE_PENDING,
   REVIEW_CREATE_SUCCESS,
   REVIEW_CREATE_ERROR,
-  REVIEW_VALIDATE,
+  REVIEW_VALIDATED,
   schemaLoadSuccess,
   reviewLoadSuccess,
-  reviewCreatePending,
   reviewCreateSuccess,
   reviewCreateError,
-  reviewValidate,
+  reviewValidated,
   loadSchema,
   loadReviews,
-  createReview
+  createReview,
+  validateReview
 } from '../actions';
+import mockSchema from './mockSchema.json';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 describe('review action creators', () => {
   let store;
+  let validatePost;
 
-  beforeEach(() => {
-    store = mockStore({});
+  beforeEach(async () => {
+    validatePost = jest.fn();
+    store = mockStore({ validatePost });
 
     fetchMock.reset();
     fetchMock.restore();
 
     fetchMock.get('/api/schema', {
       status: 200,
-      body: JSON.stringify({ schema: 'SCHEMA' })
+      body: mockSchema
     });
     fetchMock.get('/api/reviews', {
       status: 200,
@@ -69,16 +72,6 @@ describe('review action creators', () => {
     });
   });
 
-  describe('reviewCreatePending', () => {
-    it('should dispatch REVIEW CREATE PENDING action', () => {
-      const action = reviewCreatePending();
-
-      expect(action, 'to equal', {
-        type: REVIEW_CREATE_PENDING
-      });
-    });
-  });
-
   describe('reviewCreateSuccess', () => {
     it('should dispatch REVIEW CREATE SUCCESS action', () => {
       const action = reviewCreateSuccess({ id: 1, comment: 'great' });
@@ -101,13 +94,13 @@ describe('review action creators', () => {
     });
   });
 
-  describe('reviewValidate', () => {
-    it('should dispatch REVIEW VALIDATE action', () => {
-      const action = reviewValidate({ comment: 'great' });
+  describe('reviewValidated', () => {
+    it('should dispatch REVIEW VALIDATED action', async () => {
+      const action = reviewValidated({ errors: 'ERRORS' });
 
       expect(action, 'to equal', {
-        type: REVIEW_VALIDATE,
-        payload: { comment: 'great' }
+        type: REVIEW_VALIDATED,
+        payload: { errors: 'ERRORS' }
       });
     });
   });
@@ -123,7 +116,10 @@ describe('review action creators', () => {
       await store.dispatch(loadSchema());
 
       expect(store.getActions(), 'to equal', [
-        { type: SCHEMA_LOAD_SUCCESS, payload: { schema: 'SCHEMA' } }
+        {
+          type: SCHEMA_LOAD_SUCCESS,
+          payload: await SwaggerParser.dereference(mockSchema)
+        }
       ]);
     });
   });
@@ -160,11 +156,10 @@ describe('review action creators', () => {
       ]);
     });
 
-    it('should dispatch REVIEW CREATE PENDING and then REVIEW CREATE SUCCESS ACTION when post is successful', async () => {
+    it('should dispatch REVIEW CREATE SUCCESS ACTION when post is successful', async () => {
       await store.dispatch(createReview({ comment: 'great' }));
 
       expect(store.getActions(), 'to equal', [
-        { type: REVIEW_CREATE_PENDING },
         {
           type: REVIEW_CREATE_SUCCESS,
           payload: { id: 1, comment: 'great' }
@@ -172,7 +167,7 @@ describe('review action creators', () => {
       ]);
     });
 
-    it('should dispatch REVIEW CREATE PENDING and then REVIEW CREATE ERROR ACTION when post is unsuccessful', async () => {
+    it('should dispatch REVIEW CREATE ERROR when post is unsuccessful', async () => {
       fetchMock.restore();
       fetchMock.postOnce('/api/reviews', {
         status: 404,
@@ -182,10 +177,39 @@ describe('review action creators', () => {
       await store.dispatch(createReview({ comment: 'invalid' }));
 
       expect(store.getActions(), 'to equal', [
-        { type: REVIEW_CREATE_PENDING },
         {
           type: REVIEW_CREATE_ERROR,
           payload: { message: 'bad request' }
+        }
+      ]);
+    });
+
+    it('should validate a review and dispatch the validation errors to the store', async () => {
+      validatePost.mockImplementation(() =>
+        Promise.reject(new Error('VALIDATION ERROR'))
+      );
+
+      await store.dispatch(validateReview({ firstName: 'Ed' }));
+
+      expect(store.getActions(), 'to equal', [
+        {
+          type: REVIEW_VALIDATED,
+          payload: {
+            message: 'VALIDATION ERROR'
+          }
+        }
+      ]);
+    });
+
+    it('should validate a review and dispatch null when there are no validation errors', async () => {
+      validatePost.mockImplementation(() => Promise.resolve(null));
+
+      await store.dispatch(validateReview({ firstName: 'Ed', lastName: 'B' }));
+
+      expect(store.getActions(), 'to equal', [
+        {
+          type: REVIEW_VALIDATED,
+          payload: null
         }
       ]);
     });

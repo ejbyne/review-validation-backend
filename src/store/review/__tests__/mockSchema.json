@@ -1,0 +1,75 @@
+{
+  "swagger": "2.0",
+  "host": "localhost:5000",
+  "basePath": "/api",
+  "schemes": ["http"],
+  "info": {
+    "title": "JSUnconf Review API",
+    "version": "1.0"
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "tags": [],
+  "paths": {
+    "/reviews": {
+      "post": {
+        "operationId": "postReviews",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/Review"
+            }
+          }
+        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["reviews"],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Review"
+            },
+            "description": "Created"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteReviews",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["reviews"],
+        "responses": {
+          "204": {
+            "schema": {
+              "type": "string",
+              "maxLength": 0
+            },
+            "description": "No Content"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Review": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        }
+      },
+      "required": ["firstName", "lastName"]
+    },
+    "ReviewCollection": {
+      "type": "array",
+      "items": {
+        "$ref": "#definitionsReview"
+      }
+    }
+  }
+}

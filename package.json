@@ -10,6 +10,9 @@
   },
   "license": "ISC",
   "dependencies": {
+    "enjoi": "^3.2.2",
+    "joi": "^13.1.2",
+    "joi-browser": "^13.0.1",
     "material-ui": "^1.0.0-beta.41",
     "prop-types": "^15.6.1",
     "react": "^16.3.1",
@@ -18,7 +21,9 @@
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "regenerator-runtime": "^0.11.1"
+    "regenerator-runtime": "^0.11.1",
+    "reselect": "^3.0.1",
+    "swagger-parser": "^4.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",

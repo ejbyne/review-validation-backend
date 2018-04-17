@@ -4,15 +4,20 @@ import PropTypes from 'prop-types';
 import BasicForm from './BasicForm';
 import NotificationBar from './NotificationBar';
 
-const App = ({ onCreateReview, errorMessage, errors }) => (
+const App = ({ createReview, validateReview, errorMessage, errors }) => (
   <div>
-    <BasicForm onCreateReview={onCreateReview} errors={errors} />
+    <BasicForm
+      createReview={createReview}
+      validateReview={validateReview}
+      errors={errors}
+    />
     {errorMessage && <NotificationBar errorMessage={errorMessage} />}
   </div>
 );
 
 App.propTypes = {
-  onCreateReview: PropTypes.func.isRequired,
+  createReview: PropTypes.func.isRequired,
+  validateReview: PropTypes.func.isRequired,
   errorMessage: PropTypes.string,
   errors: PropTypes.object
 };
