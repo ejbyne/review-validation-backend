@@ -18,6 +18,7 @@ describe('review reducer', () => {
   beforeEach(() => {
     state = {
       schema: null,
+      validateCreate: null,
       reviews: [],
       errors: null
     };
@@ -36,7 +37,7 @@ describe('review reducer', () => {
     expect(updatedState, 'to satisfy', {
       ...state,
       schema,
-      validatePost: expect.it('to be a', 'function')
+      validateCreate: expect.it('to be a', 'function')
     });
   });
 

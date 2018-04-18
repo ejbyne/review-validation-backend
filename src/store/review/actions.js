@@ -46,21 +46,24 @@ export const loadReviews = () => async dispatch => {
 
 export const validateReview = command => async (dispatch, getState) => {
   try {
-    await getState().validatePost(command);
-    return dispatch(reviewValidated(null));
+    await getState().validateCreate(command);
+    dispatch(reviewValidated(null));
+    return true;
   } catch (err) {
-    return dispatch(reviewValidated({ message: err.message }));
+    dispatch(reviewValidated({ message: err.message }));
+    return false;
   }
 };
 
 export const createReview = command => async dispatch => {
-  const response = await fetch('/api/reviews', {
-    method: 'POST',
-    body: JSON.stringify(command)
-  });
-  const json = await response.json();
-  if (!response.ok) {
-    return dispatch(reviewCreateError(json));
+  const isValid = await dispatch(validateReview(command));
+  if (isValid) {
+    const response = await fetch('/api/reviews', { method: 'POST', body: JSON.stringify(command) });
+    const json = await response.json();
+    if (!response.ok) {
+      dispatch(reviewCreateError(json));
+    } else {
+      dispatch(reviewCreateSuccess(json));
+    }
   }
-  return dispatch(reviewCreateSuccess(json));
 };

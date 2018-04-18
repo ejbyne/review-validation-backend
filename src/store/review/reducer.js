@@ -29,7 +29,7 @@ const reducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         schema: payload,
-        validatePost: getValidator(payload, 'post')
+        validateCreate: getValidator(payload, 'post')
       };
     case REVIEW_LOAD_SUCCESS:
       return { ...state, reviews: payload };
