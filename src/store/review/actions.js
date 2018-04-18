@@ -6,6 +6,8 @@ export const REVIEW_CREATE_SUCCESS = 'REVIEW_CREATE_SUCCESS';
 export const REVIEW_CREATE_ERROR = 'REVIEW_CREATE_ERROR';
 export const REVIEW_VALIDATED = 'REVIEW_VALIDATED';
 
+// Action creators
+
 export const schemaLoadSuccess = payload => ({
   type: SCHEMA_LOAD_SUCCESS,
   payload
@@ -30,6 +32,8 @@ export const reviewValidated = payload => ({
   type: REVIEW_VALIDATED,
   payload
 });
+
+// Thunks
 
 export const loadSchema = () => async dispatch => {
   const response = await fetch('/api/schema');
@@ -58,7 +62,10 @@ export const validateReview = command => async (dispatch, getState) => {
 export const createReview = command => async dispatch => {
   const isValid = await dispatch(validateReview(command));
   if (isValid) {
-    const response = await fetch('/api/reviews', { method: 'POST', body: JSON.stringify(command) });
+    const response = await fetch('/api/reviews', {
+      method: 'POST',
+      body: JSON.stringify(command)
+    });
     const json = await response.json();
     if (!response.ok) {
       dispatch(reviewCreateError(json));

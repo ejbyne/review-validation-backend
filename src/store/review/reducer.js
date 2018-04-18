@@ -16,7 +16,7 @@ const FIELD_REG_EX = /(?<=").+?(?=")/;
 
 const initialState = {
   schema: null,
-  validatePost: null,
+  validateCreate: null,
   reviews: [],
   error: null
 };
