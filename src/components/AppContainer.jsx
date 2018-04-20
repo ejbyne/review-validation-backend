@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { getErrorMessage, getErrors } from '../store/review/reducer';
+import {
+  getErrorMessage,
+  getErrors,
+  getSuccess
+} from '../store/review/reducer';
 import {
   loadSchema,
   loadReviews,
@@ -23,7 +27,8 @@ class AppContainer extends Component {
 
 const mapStateToProps = state => ({
   errorMessage: getErrorMessage(state),
-  errors: getErrors(state)
+  errors: getErrors(state),
+  success: getSuccess(state)
 });
 
 const mapDispatchToProps = dispatch => ({

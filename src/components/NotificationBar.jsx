@@ -7,6 +7,17 @@ class NotificationBar extends Component {
     errorMessage: PropTypes.string.isRequired
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.errorMessage !== prevState.errorMessage) {
+      const stateUpdate = { errorMessage: nextProps.errorMessage };
+      if (nextProps.errorMessage) {
+        stateUpdate.open = true;
+      }
+      return stateUpdate;
+    }
+    return null;
+  }
+
   state = {
     open: true
   };

@@ -5,7 +5,6 @@ import reducer, { getErrorMessage, getErrors } from '../reducer';
 import {
   REVIEW_CREATE_SUCCESS,
   REVIEW_CREATE_ERROR,
-  REVIEW_CREATE_PENDING,
   REVIEW_LOAD_SUCCESS,
   REVIEW_VALIDATED,
   SCHEMA_LOAD_SUCCESS
@@ -20,7 +19,8 @@ describe('review reducer', () => {
       schema: null,
       validateCreate: null,
       reviews: [],
-      errors: null
+      errors: null,
+      success: false
     };
   });
 
@@ -55,19 +55,7 @@ describe('review reducer', () => {
     });
   });
 
-  it('should reset error message when review create pending', () => {
-    state = { ...state, errorMessage: 'ERRORS' };
-    const action = { type: REVIEW_CREATE_PENDING };
-
-    const updatedState = reducer(state, action);
-
-    expect(updatedState, 'to equal', {
-      ...state,
-      errorMessage: null
-    });
-  });
-
-  it('should add created review to state', () => {
+  it('should add created review to state and set success to true', () => {
     const action = {
       type: REVIEW_CREATE_SUCCESS,
       payload: { id: 1, comment: 'great' }
@@ -77,11 +65,12 @@ describe('review reducer', () => {
 
     expect(updatedState, 'to equal', {
       ...state,
-      reviews: [{ id: 1, comment: 'great' }]
+      reviews: [{ id: 1, comment: 'great' }],
+      success: true
     });
   });
 
-  it('should add error to state', () => {
+  it('should add error to state and set success to false', () => {
     const action = {
       type: REVIEW_CREATE_ERROR,
       payload: { message: 'ERROR' }
@@ -96,6 +85,7 @@ describe('review reducer', () => {
   });
 
   it('should add review validation result to state', () => {
+    state = { ...state, success: true };
     const action = {
       type: REVIEW_VALIDATED,
       payload: { message: 'ERROR' }
@@ -105,7 +95,8 @@ describe('review reducer', () => {
 
     expect(updatedState, 'to equal', {
       ...state,
-      error: { message: 'ERROR' }
+      error: { message: 'ERROR' },
+      success: false
     });
   });
 

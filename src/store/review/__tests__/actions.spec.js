@@ -150,7 +150,9 @@ describe('review action creators', () => {
     it('should validate a review before sending to the backend', () => {
       store.dispatch(createReview({ comment: 'great' }));
 
-      expect(validateCreate, 'to have a call satisfying', [{ comment: 'great' }]);
+      expect(validateCreate, 'to have a call satisfying', [
+        { comment: 'great' }
+      ]);
     });
 
     it('should not send a post request to the backend if the review is not validated', () => {

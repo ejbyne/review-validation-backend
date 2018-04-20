@@ -1,15 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import BasicForm from './BasicForm';
+import Form from './Form';
 import NotificationBar from './NotificationBar';
 
-const App = ({ createReview, validateReview, errorMessage, errors }) => (
+const App = ({
+  createReview,
+  validateReview,
+  errorMessage,
+  errors,
+  success
+}) => (
   <div>
-    <BasicForm
+    <Form
       createReview={createReview}
       validateReview={validateReview}
       errors={errors}
+      success={success}
     />
     {errorMessage && <NotificationBar errorMessage={errorMessage} />}
   </div>
