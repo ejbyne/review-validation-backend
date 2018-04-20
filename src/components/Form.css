@@ -1,7 +1,7 @@
 .container {
   display: flex;
-  flex-wrap: wrap;
-  width: 30%;
+  flex-direction: column;
+  width: 30rem;
 }
 
 .textField {

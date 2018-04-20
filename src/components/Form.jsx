@@ -101,16 +101,6 @@ class Form extends Component {
           className={styles.textField}
         />
         <TextField
-          error={this.hasError('score')}
-          label={messages.score}
-          value={score}
-          helperText={this.getError('score')}
-          onChange={this.handleChange('score')}
-          onBlur={this.handleBlur('score')}
-          margin="normal"
-          className={styles.textField}
-        />
-        <TextField
           error={this.hasError('comment')}
           label={messages.comment}
           value={comment}
@@ -119,6 +109,16 @@ class Form extends Component {
           rows="4"
           onChange={this.handleChange('comment')}
           onBlur={this.handleBlur('comment')}
+          margin="normal"
+          className={styles.textField}
+        />
+        <TextField
+          error={this.hasError('score')}
+          label={messages.score}
+          value={score}
+          helperText={this.getError('score')}
+          onChange={this.handleChange('score')}
+          onBlur={this.handleBlur('score')}
           margin="normal"
           className={styles.textField}
         />
