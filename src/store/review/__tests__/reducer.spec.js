@@ -1,6 +1,6 @@
 import expect from 'unexpected';
 
-import reducer, { getErrorMessage, getErrors } from '../reducer';
+import reducer, { getErrorMessage } from '../reducer';
 import {
   REVIEW_CREATE_SUCCESS,
   REVIEW_CREATE_ERROR,
@@ -79,20 +79,6 @@ describe('review reducer', () => {
       const selected = getErrorMessage(state);
 
       expect(selected, 'to equal', JSON.stringify(error));
-    });
-
-    it('should convert the error to an object containing error fields', () => {
-      state = {
-        ...state,
-        error
-      };
-
-      const selected = getErrors(state);
-
-      expect(selected, 'to equal', {
-        firstName: 'First Name is not allowed to be empty',
-        date: 'Date must be a number of milliseconds or valid date string'
-      });
     });
   });
 });
