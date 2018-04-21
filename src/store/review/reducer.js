@@ -5,6 +5,10 @@ import {
   REVIEW_CREATE_SUCCESS,
   REVIEW_CREATE_ERROR
 } from './actions';
+import messages from '../../messages/messages.en.json';
+
+const ERROR_REG_EX = /(?<=\[).+?(?=\])/g;
+const FIELD_REG_EX = /(?<=").+?(?=")/;
 
 const initialState = {
   reviews: [],
@@ -19,7 +23,12 @@ const reducer = (state = initialState, { type, payload }) => {
     case REVIEW_LOAD_SUCCESS:
       return { ...state, reviews: payload };
     case REVIEW_CREATE_SUCCESS:
-      return { ...state, reviews: [...state.reviews, payload], success: true };
+      return {
+        ...state,
+        reviews: [...state.reviews, payload],
+        success: true,
+        error: null
+      };
     case REVIEW_CREATE_ERROR:
       return {
         ...state,
@@ -42,4 +51,20 @@ export const getErrorMessage = createSelector(
   error => (error ? JSON.stringify(error) : null)
 );
 
+export const getErrors = createSelector(
+  [getError],
+  error => (error ? parseErrors(error) : {})
+);
+
 export const getSuccess = state => state.success;
+
+// Private Functions
+
+const parseErrors = error => {
+  const validationErrors = error.message.match(ERROR_REG_EX) || [];
+  return validationErrors.reduce((errors, current) => {
+    const field = current.match(FIELD_REG_EX)[0] || [];
+    errors[field] = current.replace(`"${field}"`, messages[field]);
+    return errors;
+  }, {});
+};
