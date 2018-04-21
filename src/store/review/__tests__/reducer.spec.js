@@ -13,7 +13,7 @@ describe('review reducer', () => {
   beforeEach(() => {
     state = {
       reviews: [],
-      errors: null,
+      error: null,
       success: false
     };
   });

@@ -23,7 +23,7 @@ const reducer = (state = initialState, { type, payload }) => {
     case REVIEW_LOAD_SUCCESS:
       return { ...state, reviews: payload };
     case REVIEW_CREATE_SUCCESS:
-      return { ...state, reviews: [...state.reviews, payload], success: true };
+      return { ...state, reviews: [...state.reviews, payload], success: true, error: null };
     case REVIEW_CREATE_ERROR:
       return {
         ...state,

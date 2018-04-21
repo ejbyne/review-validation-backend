@@ -13,14 +13,12 @@ const emptyForm = {
   email: '',
   score: '',
   comment: '',
-  date: '',
-  willComeAgain: 'maybe'
+  date: ''
 };
 
 class Form extends Component {
   static propTypes = {
     createReview: PropTypes.func.isRequired,
-    validateReview: PropTypes.func.isRequired,
     errors: PropTypes.object.isRequired
   };
 
@@ -29,7 +27,6 @@ class Form extends Component {
       const stateUpdate = { success: nextProps.success };
       if (nextProps.success) {
         stateUpdate.data = { ...emptyForm };
-        stateUpdate.edited = new Set();
       }
       return stateUpdate;
     }
@@ -37,13 +34,10 @@ class Form extends Component {
   }
 
   state = {
-    data: emptyForm,
-    edited: new Set()
+    data: emptyForm
   };
 
-  getError = field => this.state.edited.has(field) && this.props.errors[field];
-
-  hasError = field => this.props.errors[field] && this.state.edited.has(field);
+  hasError = field => this.props.errors[field] !== undefined;
 
   handleChange = field => ({ target: { value } }) => {
     this.setState(({ data }) => ({
@@ -51,20 +45,13 @@ class Form extends Component {
     }));
   };
 
-  handleBlur = field => () => {
-    this.props.validateReview(this.state.data);
-    this.setState(({ edited }) => ({
-      edited: new Set([...edited, field])
-    }));
-  };
-
   handleSubmit = () => {
     const { data } = this.state;
     this.props.createReview(data);
-    this.setState({ edited: new Set(Object.keys(data)) });
   };
 
   render() {
+    const { errors } = this.props;
     const {
       data: { firstName, lastName, email, score, comment, date }
     } = this.state;
@@ -74,9 +61,8 @@ class Form extends Component {
           error={this.hasError('firstName')}
           label={messages.firstName}
           value={firstName}
-          helperText={this.getError('firstName')}
+          helperText={errors.firstName}
           onChange={this.handleChange('firstName')}
-          onBlur={this.handleBlur('firstName')}
           margin="normal"
           className={styles.textField}
         />
@@ -84,9 +70,8 @@ class Form extends Component {
           error={this.hasError('lastName')}
           label={messages.lastName}
           value={lastName}
-          helperText={this.getError('lastName')}
+          helperText={errors.lastName}
           onChange={this.handleChange('lastName')}
-          onBlur={this.handleBlur('lastName')}
           margin="normal"
           className={styles.textField}
         />
@@ -94,9 +79,8 @@ class Form extends Component {
           error={this.hasError('email')}
           label={messages.email}
           value={email}
-          helperText={this.getError('email')}
+          helperText={errors.email}
           onChange={this.handleChange('email')}
-          onBlur={this.handleBlur('email')}
           margin="normal"
           className={styles.textField}
         />
@@ -104,11 +88,10 @@ class Form extends Component {
           error={this.hasError('comment')}
           label={messages.comment}
           value={comment}
-          helperText={this.getError('comment')}
+          helperText={errors.comment}
           multiline
           rows="6"
           onChange={this.handleChange('comment')}
-          onBlur={this.handleBlur('comment')}
           margin="normal"
           className={styles.comment}
         />
@@ -116,9 +99,8 @@ class Form extends Component {
           error={this.hasError('score')}
           label={messages.score}
           value={score}
-          helperText={this.getError('score')}
+          helperText={errors.score}
           onChange={this.handleChange('score')}
-          onBlur={this.handleBlur('score')}
           margin="normal"
           className={styles.textField}
         />
@@ -126,9 +108,8 @@ class Form extends Component {
           error={this.hasError('date')}
           label={messages.date}
           value={date}
-          helperText={this.getError('date')}
+          helperText={errors.date}
           onChange={this.handleChange('date')}
-          onBlur={this.handleBlur('date')}
           margin="normal"
           className={styles.textField}
         />
