@@ -106,11 +106,11 @@ class Form extends Component {
           value={comment}
           helperText={this.getError('comment')}
           multiline
-          rows="4"
+          rows="6"
           onChange={this.handleChange('comment')}
           onBlur={this.handleBlur('comment')}
           margin="normal"
-          className={styles.textField}
+          className={styles.comment}
         />
         <TextField
           error={this.hasError('score')}
@@ -132,7 +132,12 @@ class Form extends Component {
           margin="normal"
           className={styles.textField}
         />
-        <Button variant="raised" color="secondary" onClick={this.handleSubmit}>
+        <Button
+          variant="raised"
+          color="secondary"
+          onClick={this.handleSubmit}
+          className={styles.button}
+        >
           Submit Form
         </Button>
       </form>
