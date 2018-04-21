@@ -19,7 +19,7 @@ describe('review reducer', () => {
       schema: null,
       validateCreate: null,
       reviews: [],
-      errors: null,
+      error: null,
       success: false
     };
   });
