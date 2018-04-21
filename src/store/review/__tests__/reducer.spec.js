@@ -1,44 +1,21 @@
 import expect from 'unexpected';
-import SwaggerParser from 'swagger-parser';
 
 import reducer, { getErrorMessage, getErrors } from '../reducer';
 import {
   REVIEW_CREATE_SUCCESS,
   REVIEW_CREATE_ERROR,
-  REVIEW_LOAD_SUCCESS,
-  REVIEW_VALIDATED,
-  SCHEMA_LOAD_SUCCESS
+  REVIEW_LOAD_SUCCESS
 } from '../actions';
-import mockSchema from './mockSchema.json';
 
 describe('review reducer', () => {
   let state;
 
   beforeEach(() => {
     state = {
-      schema: null,
-      validateCreate: null,
       reviews: [],
       errors: null,
       success: false
     };
-  });
-
-  it('should add loaded schema to state', async () => {
-    const schema = await SwaggerParser.dereference(mockSchema);
-
-    const action = {
-      type: SCHEMA_LOAD_SUCCESS,
-      payload: schema
-    };
-
-    const updatedState = reducer(state, action);
-
-    expect(updatedState, 'to satisfy', {
-      ...state,
-      schema,
-      validateCreate: expect.it('to be a', 'function')
-    });
   });
 
   it('should add loaded reviews to state', () => {
@@ -81,22 +58,6 @@ describe('review reducer', () => {
     expect(updatedState, 'to equal', {
       ...state,
       error: { message: 'ERROR' }
-    });
-  });
-
-  it('should add review validation result to state', () => {
-    state = { ...state, success: true };
-    const action = {
-      type: REVIEW_VALIDATED,
-      payload: { message: 'ERROR' }
-    };
-
-    const updatedState = reducer(state, action);
-
-    expect(updatedState, 'to equal', {
-      ...state,
-      error: { message: 'ERROR' },
-      success: false
     });
   });
 
